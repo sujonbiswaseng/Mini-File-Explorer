@@ -1,0 +1,60 @@
+import { createContext, useCallback, useEffect, useState } from "react";
+import {FileSystemContextType, FileSystemItem, ItemType} from "../types/FileSystem.type"
+export const fileSystemContext=createContext<FileSystemContextType |undefined>(undefined)
+
+const INITIAL_DATA: FileSystemItem[] = [
+    { id: "root-docs", name: "Documents", type: "folder", parentId: null, createdAt: Date.now(), updatedAt: Date.now() },
+    { id: "root-pics", name: "Pictures", type: "folder", parentId: null, createdAt: Date.now(), updatedAt: Date.now() },
+    { id: "root-down", name: "Downloads", type: "folder", parentId: null, createdAt: Date.now(), updatedAt: Date.now() },
+    { id: "file-notes", name: "Notes.txt", type: "file", parentId: "root-docs", content: "These are some initial notes.\n\nWelcome to Mini File Explorer!", createdAt: Date.now(), updatedAt: Date.now() },
+  ];
+export const filteSystemProvider=({children}:{children:React.ReactNode})=>{
+
+    const [items, setItems] = useState<FileSystemItem[]>([]);
+
+    useEffect(() => {
+        try {
+          const stored = localStorage.getItem("mini-file-explorer-data");
+          if (stored) {
+            setItems(JSON.parse(stored));
+          } else {
+            setItems(INITIAL_DATA);
+          }
+        } catch (e) {
+          console.error("Failed to load data from localStorage", e);
+          setItems(INITIAL_DATA);
+        }
+      }, []);
+
+      useEffect(() => {
+   
+          localStorage.setItem("mini-file-explorer-data", JSON.stringify(items));
+    
+      }, [items]);
+
+      const createItem = useCallback((name: string, type: ItemType, parentId: string | null) => {
+        const newItem: FileSystemItem = {
+          id: crypto.randomUUID(),
+          name,
+          type,
+          parentId,
+          createdAt: Date.now(),
+          updatedAt: Date.now(),
+          ...(type === "file" ? { content: "" } : {}),
+        };
+        setItems((prev) => [...prev, newItem]);
+      }, []);
+
+      return (
+        <fileSystemContext.Provider
+          value={{
+            items,
+            createItem,
+          }}
+        >
+          {children}
+        </fileSystemContext.Provider>
+      );
+
+
+}

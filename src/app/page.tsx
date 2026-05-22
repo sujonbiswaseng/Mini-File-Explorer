@@ -1,9 +1,16 @@
-import React from 'react'
+"use client";
 
-const Home = () => {
+import { useState } from "react";
+
+export default function Home() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   return (
-    <div>page</div>
-  )
-}
+    <div className="flex flex-col h-screen w-full overflow-hidden bg-white dark:bg-zinc-950">
 
-export default Home
+      <div className="flex flex-1 overflow-hidden relative">
+      
+      </div>
+    </div>
+  );
+}
