@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { X, Save } from 'lucide-react';
+import { X, Save, Truck } from 'lucide-react';
 import { useFileSystem } from '@/hook/UseFileSystem';
 import { toast } from 'react-toastify';
 
 export function FileEditor() {
-  const { selectedFileId, setSelectedFileId, items, updateFileContent } = useFileSystem();
+  const { selectedFileId,deleteItem, setSelectedFileId, items, updateFileContent } = useFileSystem();
   const [content, setContent] = useState("");
-
+  const activeId = selectedFileId;
+  const activeItem = items.find(i => i.id === activeId);
   const activeFile = selectedFileId ? items.find(i => i.id === selectedFileId) : null;
+
 
   useEffect(() => {
     if (activeFile) {
@@ -26,6 +28,16 @@ export function FileEditor() {
     if ((e.ctrlKey || e.metaKey) && e.key === 's') {
       e.preventDefault();
       handleSave();
+    }
+  };
+
+  const handleDelete = () => {
+    if (activeId) {
+      if (confirm(`Are you sure you want to delete "${activeItem?.name}"?`)) {
+        deleteItem(activeId);
+        toast.success("file deleted successfully")
+        return
+      }
     }
   };
 
@@ -49,6 +61,13 @@ export function FileEditor() {
             >
               <Save size={14} />
               <span>Save</span>
+            </button>
+            <button
+              onClick={handleDelete}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-xs font-medium transition-colors shadow-sm"
+            >
+              <Truck size={14} />
+              <span>delete</span>
             </button>
             <div className="w-px h-5 bg-gray-300 dark:bg-zinc-700 mx-1" />
             <button
