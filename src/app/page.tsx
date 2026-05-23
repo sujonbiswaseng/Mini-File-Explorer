@@ -1,5 +1,6 @@
 "use client";
 
+import { FileEditor } from "@/components/Explore/FileEditor";
 import { MainPanel } from "@/components/Explore/mainpanel";
 import { Sidebar } from "@/components/Layout/Sidebar";
 import { useState } from "react";
@@ -17,6 +18,7 @@ export default function Home() {
         />
         <MainPanel/>
       </div>
+      <FileEditor/>
     </div>
   );
 }
