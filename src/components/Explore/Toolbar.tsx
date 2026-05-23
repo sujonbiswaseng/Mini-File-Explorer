@@ -61,7 +61,7 @@ export function Toolbar() {
           existName = itemsArray.some(item => 
             typeof item.name === 'string' &&
             (
-              item.name.trim() === inputValue.trim() ||
+              item.name.trim() === `${inputValue.trim()}.txt` ||
               item.name.trim() === `${inputValue.trim()}.txt`
             )
           );

@@ -1,36 +1,113 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mini File Explorer
 
-## Getting Started
+A modern and responsive Mini File Explorer web application inspired by desktop file managers like VS Code Explorer and Google Drive.
 
-First, run the development server:
+The application allows users to manage folders and text files using a clean hierarchical tree structure with real-time navigation and editing capabilities.
+
+---
+
+# Quick Links
+
+Frontend Repo : https://github.com/sujonbiswaseng/Mini-File-Explorer.git
+
+Live Demo : https://mini-file-explorer-mu.vercel.app
+
+---
+
+# Key Features
+
+## 📁 Folder Management
+
+- Create folders
+- Rename folders
+- Delete folders recursively
+- Nested folder support
+- Expand/Collapse folder tree
+
+## 📄 File Management
+
+- Create text files
+- Rename files
+- Delete files
+- Open and edit file content
+- Save text content
+
+## 🧭 Navigation
+
+- Sidebar tree navigation
+- Folder content preview
+- Active folder selection
+- Responsive two-panel layout
+
+## 💾 Data Persistence
+
+- Local storage support
+- Persistent data after refresh
+
+## 🎨 UI/UX
+
+- Responsive design
+- Clean and modern interface
+- Reusable components
+- Smooth user experience
+
+---
+
+# 🛠️ Technology Stack
+
+## Frontend
+
+- Next.js
+- TypeScript
+- Tailwind CSS
+
+## State Management
+- Local Storage
+
+---
+
+# Setup Instructions
 
 ```bash
+git clone https://github.com/sujonbiswaseng/Mini-File-Explorer.git
+
+cd Mini-File-Explorer
+
+npm install
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+src/
+ ├── actions/
+ ├── app/
+ ├── components/
+ ├── context/
+ ├── hook/
+ ├── lib/
+ ├── services/
+ ├── types/
+ └── validations/
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+# Core Functionalities
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Tree-based folder structure
+- Recursive folder rendering
+- CRUD operations
+- File content editing
+- Responsive layout
+- Persistent storage
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+# About
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+A modern Mini File Explorer application for managing folders and text files with hierarchical navigation, recursive operations, and editable text file support.
