@@ -76,6 +76,15 @@ export const FileSystemProvider = ({children}:{children:React.ReactNode}) => {
         if (selectedFileId === id) setSelectedFileId(null);
       }, [selectedFolderId, selectedFileId]);
     
+      const updateFileContent = useCallback((id: string, content: string) => {
+        setItems((prev) =>
+          prev.map((item) =>
+            item.id === id && item.type === "file"
+              ? { ...item, content, updatedAt: Date.now() }
+              : item
+          )
+        );
+      }, []);
 
     return (
         <fileSystemContext.Provider
@@ -87,7 +96,8 @@ export const FileSystemProvider = ({children}:{children:React.ReactNode}) => {
                 setSelectedFileId,
                 selectedFileId,
                 renameItem,
-                deleteItem
+                deleteItem,
+                updateFileContent
             }}
         >
             {children}

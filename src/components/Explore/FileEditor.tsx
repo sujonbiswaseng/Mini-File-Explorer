@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save } from 'lucide-react';
 import { useFileSystem } from '@/hook/UseFileSystem';
-
+import { toast } from 'react-toastify';
 
 export function FileEditor() {
-  const { selectedFileId, setSelectedFileId, items } = useFileSystem();
+  const { selectedFileId, setSelectedFileId, items, updateFileContent } = useFileSystem();
   const [content, setContent] = useState("");
 
   const activeFile = selectedFileId ? items.find(i => i.id === selectedFileId) : null;
@@ -16,6 +16,18 @@ export function FileEditor() {
   }, [activeFile?.id]);
 
   if (!activeFile) return null;
+
+  const handleSave = () => {
+    updateFileContent(activeFile.id, content);
+    toast.success("saved successfully", { autoClose: 1000 });
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+      e.preventDefault();
+      handleSave();
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 sm:p-6 md:p-12 animate-in fade-in duration-200">
@@ -32,7 +44,7 @@ export function FileEditor() {
 
           <div className="flex items-center gap-2">
             <button
-            
+              onClick={handleSave}
               className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-xs font-medium transition-colors shadow-sm"
             >
               <Save size={14} />
@@ -52,12 +64,7 @@ export function FileEditor() {
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            onKeyDown={(e) => {
-              if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-                e.preventDefault();
-                
-              }
-            }}
+            onKeyDown={handleKeyDown}
             placeholder="Start typing your notes here..."
             className="w-full h-full resize-none bg-transparent outline-none text-gray-800 dark:text-gray-200 placeholder:text-gray-300 dark:placeholder:text-zinc-700 font-sans text-base leading-relaxed"
             spellCheck={false}

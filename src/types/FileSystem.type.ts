@@ -19,5 +19,6 @@ export interface FileSystemContextType {
   setSelectedFileId: (id: string | null) => void;
   renameItem: (id: string, newName: string) => void;
   deleteItem: (id: string) => void;
+  updateFileContent: (id: string, content: string) => void;
   }
   
