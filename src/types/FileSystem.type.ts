@@ -17,6 +17,7 @@ export interface FileSystemContextType {
     setSelectedFolderId: (id: string | null) => void;
     selectedFileId: string | null;
   setSelectedFileId: (id: string | null) => void;
+  renameItem: (id: string, newName: string) => void;
    
   }
   

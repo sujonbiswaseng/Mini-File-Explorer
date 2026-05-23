@@ -9,7 +9,8 @@ export function Toolbar() {
     selectedFolderId, 
     selectedFileId, 
     createItem, 
-    items 
+    items ,
+    renameItem
   } = useFileSystem();
 
   const [isNewFolderModalOpen, setIsNewFolderModalOpen] = useState(false);
@@ -75,6 +76,40 @@ export function Toolbar() {
       const name = inputValue.trim().includes('.') ? inputValue.trim() : `${inputValue.trim()}.txt`;
       createItem(name, "file", selectedFolderId);
       setIsNewFileModalOpen(false);
+      setInputValue("");
+    }
+  };
+
+  const handleRename = () => {
+    if (inputValue.trim() && activeId) {
+      const getitems = localStorage.getItem("mini-file-explorer-data");
+      if (getitems) {
+        try {
+          const itemsArray = JSON.parse(getitems);
+          if (Array.isArray(itemsArray)) {
+            const currentItem = itemsArray.find(item => item.id === activeId);
+            if (currentItem) {
+              const newName = inputValue.trim();
+              const duplicate = itemsArray.some(item =>
+                item.id !== activeId &&
+                item.parentId === currentItem.parentId &&
+                item.type === currentItem.type &&
+                (item.name === newName || (currentItem.type === "file" && item.name === (newName.includes('.') ? newName : `${newName}.txt`)))
+              );
+              if (duplicate) {
+                toast.error("Name already exists");
+                return;
+              }
+            }
+          }
+        } catch (e) {
+          toast.error("something went wrong please try again")
+        return        }
+      }
+    }
+    if (inputValue.trim() && activeId) {
+      renameItem(activeId, inputValue.trim());
+      setIsRenameModalOpen(false);
       setInputValue("");
     }
   };
@@ -147,6 +182,22 @@ export function Toolbar() {
           <div className="flex justify-end gap-2">
             <button onClick={() => setIsNewFileModalOpen(false)} className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-zinc-800 rounded-md">Cancel</button>
             <button onClick={handleCreateFile} className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md">Create</button>
+          </div>
+        </div>
+      </Modal>
+      <Modal isOpen={isRenameModalOpen} onClose={() => setIsRenameModalOpen(false)} title="Rename Item">
+        <div className="space-y-4">
+          <input
+            autoFocus
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleRename()}
+            className="w-full p-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-transparent outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+          <div className="flex justify-end gap-2">
+            <button onClick={() => setIsRenameModalOpen(false)} className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-zinc-800 rounded-md">Cancel</button>
+            <button onClick={handleRename} className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md">Save</button>
           </div>
         </div>
       </Modal>
