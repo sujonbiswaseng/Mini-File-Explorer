@@ -21,7 +21,7 @@ export function FileEditor() {
 
   const handleSave = () => {
     updateFileContent(activeFile.id, content);
-    toast.success("saved successfully", { autoClose: 1000 });
+    toast.success("saved successfully", { autoClose: 2000 });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -35,7 +35,7 @@ export function FileEditor() {
     if (activeId) {
       if (confirm(`Are you sure you want to delete "${activeItem?.name}"?`)) {
         deleteItem(activeId);
-        toast.success("file deleted successfully")
+        toast.success("file deleted successfully",{autoClose:2000})
         return
       }
     }

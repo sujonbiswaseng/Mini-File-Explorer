@@ -39,7 +39,7 @@ export function Toolbar() {
       }
     }
     if (existName) {
-      toast.error("Name already exists");
+      toast.error("Name already exists",{autoClose:2000});
       return;
     }
     if (inputValue.trim()) {
@@ -71,7 +71,7 @@ export function Toolbar() {
       }
     }
     if (existName) {
-      toast.error("Name already exists");
+      toast.error("Name already exists",{autoClose:2000});
       return;
     }
     if (inputValue.trim()) {
@@ -102,13 +102,13 @@ export function Toolbar() {
                 (item.name === newName || (currentItem.type === "file" && item.name === (newName.includes('.') ? newName : `${newName}.txt`)))
               );
               if (duplicate) {
-                toast.error("Name already exists");
+                toast.error("Name already exists",{autoClose:2000});
                 return;
               }
             }
           }
         } catch (e) {
-          toast.error("something went wrong please try again")
+          toast.error("something went wrong please try again",{autoClose:2000})
         return        }
       }
     }

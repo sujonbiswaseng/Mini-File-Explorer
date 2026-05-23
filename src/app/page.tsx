@@ -2,6 +2,7 @@
 
 import { FileEditor } from "@/components/Explore/FileEditor";
 import { MainPanel } from "@/components/Explore/mainpanel";
+import { Header } from "@/components/Layout/header";
 import { Sidebar } from "@/components/Layout/Sidebar";
 import { useState } from "react";
 
@@ -10,15 +11,17 @@ export default function Home() {
 
   return (
     <div className="flex flex-col h-screen w-full overflow-hidden bg-white dark:bg-zinc-950">
+      <Header onMenuClick={() => setIsSidebarOpen(true)} />
 
       <div className="flex flex-1 overflow-hidden relative">
         <Sidebar
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
         />
-        <MainPanel/>
+        <MainPanel />
       </div>
-      <FileEditor/>
+
+      <FileEditor />
     </div>
   );
 }

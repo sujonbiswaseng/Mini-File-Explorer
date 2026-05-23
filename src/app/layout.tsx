@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} antialiased text-gray-900 dark:text-gray-100 bg-white dark:bg-zinc-950 h-screen overflow-hidden`}>
+      <body className={`${inter.className} antialiased text-gray-900 dark:text-gray-100 bg-white dark:bg-zinc-950 h-screen overflow-hidden max-w-[1440px] mx-auto`}>
         <FileSystemProvider>
           {children}
           <ToastContainer />
