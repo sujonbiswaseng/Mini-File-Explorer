@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Save, Truck, Trash2, PencilRuler, Edit2 } from 'lucide-react';
+import { X, Save, Truck, Trash2, PencilRuler, Edit2, Download } from 'lucide-react';
 import { useFileSystem } from '@/hook/UseFileSystem';
 import { toast } from 'react-toastify';
 import { Modal } from '../ui/Model';
@@ -82,6 +82,26 @@ export function FileEditor() {
     }
   };
 
+
+    const handleDownload = () => {
+      const blob = new Blob([content], {
+        type: "text/plain",
+      });
+
+      const url = URL.createObjectURL(blob);
+      const fileName =
+        (typeof activeFile?.name === "string" && activeFile.name.trim() !== ""
+          ? activeFile.name
+          : "file") + ".txt";
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = fileName;
+      a.click();
+
+      URL.revokeObjectURL(url);
+    };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 sm:p-6 md:p-12 animate-in fade-in duration-200">
       <div className="bg-white dark:bg-zinc-950 w-full h-full max-w-5xl rounded-xl shadow-2xl flex flex-col overflow-hidden border border-gray-200 dark:border-zinc-800 animate-in zoom-in-95 duration-300">
@@ -122,6 +142,13 @@ export function FileEditor() {
             >
               <Trash2 size={14} />
               <span>delete</span>
+            </button>
+            <button
+              onClick={handleDownload}
+               className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-xs font-medium transition-colors shadow-sm"
+            >
+              <Download size={16} />
+              Download
             </button>
             <div className="w-px h-5 bg-gray-300 dark:bg-zinc-700 mx-1" />
             <button
