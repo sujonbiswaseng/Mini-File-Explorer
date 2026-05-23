@@ -1,8 +1,10 @@
 import React from 'react';
 
 import { X, Server } from 'lucide-react';
-import { useFilteSystem } from '@/hook/UseFileSystem';
+import { useFileSystem } from '@/hook/UseFileSystem';
 import { cn } from '@/lib/Utils';
+import { FileSystemContextType, FileSystemItem } from '@/types/FileSystem.type';
+import { TreeNode } from '../Explore/TreeNode';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -10,6 +12,14 @@ interface SidebarProps {
 }
 
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
+    const { items, setSelectedFolderId, selectedFolderId } = useFileSystem();
+
+    const rootItems = items.filter(item => item.parentId === null).sort((a, b) => {
+      if (a.type !== b.type) return a.type === 'folder' ? -1 : 1;
+      return a.name.localeCompare(b.name);
+    });
+
+    console.log(rootItems,'rootitems')
 
 
   return (
@@ -42,6 +52,11 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           >
             <Server size={14} />
             <span>My Workspace</span>
+          </div>
+          <div className="flex flex-col gap-0.5">
+            {rootItems.map(item => (
+              <TreeNode key={item.id} item={item} />
+            ))}
           </div>
         </div>
       </aside>

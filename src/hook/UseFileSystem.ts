@@ -1,10 +1,10 @@
-import { fileSystemContext } from "@/context/FilleSystemContext"
-import { useContext } from "react"
+import { fileSystemContext } from "@/context/FilleSystemContext";
+import { useContext } from "react";
 
-export const useFilteSystem=()=>{
-    const context=useContext(fileSystemContext)
-    if(context===undefined){
-        return "useFileSystem must be used within a FileSystemProvider"
-    }
-    return context
+export function useFileSystem() {
+  const context = useContext(fileSystemContext);
+  if (context === undefined) {
+    throw new Error("useFileSystem must be used within a FileSystemProvider");
+  }
+  return context;
 }
