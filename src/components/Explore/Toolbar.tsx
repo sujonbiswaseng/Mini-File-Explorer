@@ -48,7 +48,30 @@ export function Toolbar() {
   };
 
   const handleCreateFile = () => {
+    const getitems = localStorage.getItem("mini-file-explorer-data");
+    let existName = false;
+    if (getitems) {
+      try {
+        const itemsArray = JSON.parse(getitems);
+        if (Array.isArray(itemsArray)) {
+          existName = itemsArray.some(item => 
+            typeof item.name === 'string' &&
+            (
+              item.name.trim() === inputValue.trim() ||
+              item.name.trim() === `${inputValue.trim()}.txt`
+            )
+          );
+        }
+      } catch (e) {
+        existName = false;
+      }
+    }
+    if (existName) {
+      toast.error("Name already exists");
+      return;
+    }
     if (inputValue.trim()) {
+
       const name = inputValue.trim().includes('.') ? inputValue.trim() : `${inputValue.trim()}.txt`;
       createItem(name, "file", selectedFolderId);
       setIsNewFileModalOpen(false);
@@ -107,6 +130,23 @@ export function Toolbar() {
           <div className="flex justify-end gap-2">
             <button onClick={() => setIsNewFolderModalOpen(false)} className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-zinc-800 rounded-md">Cancel</button>
             <button onClick={handleCreateFolder} className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md">Create</button>
+          </div>
+        </div>
+      </Modal>
+      <Modal isOpen={isNewFileModalOpen} onClose={() => setIsNewFileModalOpen(false)} title="New Text File">
+        <div className="space-y-4">
+          <input
+            autoFocus
+            type="text"
+            placeholder="File name (e.g. notes.txt)"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleCreateFile()}
+            className="w-full p-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-transparent outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+          <div className="flex justify-end gap-2">
+            <button onClick={() => setIsNewFileModalOpen(false)} className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-zinc-800 rounded-md">Cancel</button>
+            <button onClick={handleCreateFile} className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md">Create</button>
           </div>
         </div>
       </Modal>
