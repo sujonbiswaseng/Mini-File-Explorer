@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { FileSystemProvider } from "@/context/FilleSystemContext";
+import { ToastContainer } from "react-toastify";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +21,7 @@ export default function RootLayout({
       <body className={`${inter.className} antialiased text-gray-900 dark:text-gray-100 bg-white dark:bg-zinc-950 h-screen overflow-hidden`}>
         <FileSystemProvider>
           {children}
+          <ToastContainer />
         </FileSystemProvider>
       </body>
     </html>

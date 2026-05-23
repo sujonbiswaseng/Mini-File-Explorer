@@ -1,5 +1,6 @@
 "use client";
 
+import { MainPanel } from "@/components/Explore/mainpanel";
 import { Sidebar } from "@/components/Layout/Sidebar";
 import { useState } from "react";
 
@@ -14,6 +15,7 @@ export default function Home() {
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
         />
+        <MainPanel/>
       </div>
     </div>
   );
