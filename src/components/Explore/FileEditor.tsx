@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { X, Save, Truck } from 'lucide-react';
+import { X, Save, Truck, Trash2, PencilRuler, Edit2 } from 'lucide-react';
 import { useFileSystem } from '@/hook/UseFileSystem';
 import { toast } from 'react-toastify';
+import { Modal } from '../ui/Model';
 
 export function FileEditor() {
-  const { selectedFileId,deleteItem, setSelectedFileId, items, updateFileContent } = useFileSystem();
+  const { selectedFileId,deleteItem, setSelectedFileId, items, updateFileContent,renameItem } = useFileSystem();
   const [content, setContent] = useState("");
   const activeId = selectedFileId;
   const activeItem = items.find(i => i.id === activeId);
   const activeFile = selectedFileId ? items.find(i => i.id === selectedFileId) : null;
+
+  const [inputValue, setInputValue] = useState("");
+  const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
 
 
   useEffect(() => {
@@ -40,6 +44,43 @@ export function FileEditor() {
       }
     }
   };
+  
+
+  const handleRename = () => {
+    if (inputValue.trim() && activeId) {
+      const getitems = localStorage.getItem("mini-file-explorer-data");
+      if (getitems) {
+        try {
+          const itemsArray = JSON.parse(getitems);
+          if (Array.isArray(itemsArray)) {
+            const currentItem = itemsArray.find(item => item.id === activeId);
+            if (currentItem) {
+              const newName = inputValue.trim();
+              const duplicate = itemsArray.some(item =>
+                item.id !== activeId &&
+                item.parentId === currentItem.parentId &&
+                item.type === currentItem.type &&
+                (item.name === newName || (currentItem.type === "file" && item.name === (newName.includes('.') ? newName : `${newName}.txt`)))
+              );
+              if (duplicate) {
+                toast.error("Name already exists",{autoClose:2000});
+                return;
+              }
+            }
+          }
+        } catch (e) {
+          toast.error("something went wrong please try again",{autoClose:2000})
+        return        }
+      }
+    }
+    if (inputValue.trim() && activeId) {
+     renameItem(activeId, inputValue.trim());
+      setIsRenameModalOpen(false);
+      setInputValue("");
+      toast.success("name update successfully",{autoClose:2000})
+      return
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 sm:p-6 md:p-12 animate-in fade-in duration-200">
@@ -55,6 +96,19 @@ export function FileEditor() {
           </div>
 
           <div className="flex items-center gap-2">
+          <button 
+          onClick={() => { 
+            if (activeItem) {
+              setInputValue(activeItem.name); 
+              setIsRenameModalOpen(true); 
+            }
+          }}
+          disabled={!activeId}
+           className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-xs font-medium transition-colors shadow-sm"
+          title="Rename"
+        >
+          <Edit2 size={16} />
+        </button>
             <button
               onClick={handleSave}
               className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-xs font-medium transition-colors shadow-sm"
@@ -66,7 +120,7 @@ export function FileEditor() {
               onClick={handleDelete}
               className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-xs font-medium transition-colors shadow-sm"
             >
-              <Truck size={14} />
+              <Trash2 size={14} />
               <span>delete</span>
             </button>
             <div className="w-px h-5 bg-gray-300 dark:bg-zinc-700 mx-1" />
@@ -90,6 +144,23 @@ export function FileEditor() {
           />
         </div>
       </div>
+
+      <Modal isOpen={isRenameModalOpen} onClose={() => setIsRenameModalOpen(false)} title="Rename">
+        <div className="space-y-3">
+          <input
+            autoFocus
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleRename()}
+            className="w-full p-2 border border-gray-300 dark:border-zinc-700 rounded-md bg-transparent outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+          <div className="flex justify-end gap-2">
+            <button onClick={() => setIsRenameModalOpen(false)} className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-zinc-800 rounded-md">Cancel</button>
+            <button onClick={handleRename} className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md">Save</button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
