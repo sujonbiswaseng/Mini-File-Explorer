@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { FolderPlus, FilePlus, Edit2, Trash2, MoreVertical } from 'lucide-react';
 import {  toast } from 'react-toastify';
 import { useFileSystem } from '@/hook/UseFileSystem';
@@ -10,6 +10,7 @@ export function Toolbar() {
     selectedFileId, 
     createItem, 
     items ,
+    deleteItem,
     renameItem
   } = useFileSystem();
 
@@ -45,6 +46,8 @@ export function Toolbar() {
       createItem(inputValue.trim(), "folder", selectedFolderId);
       setIsNewFolderModalOpen(false);
       setInputValue("");
+      toast.success("Folder created successfully",{autoClose:2000})
+      return
     }
   };
 
@@ -77,6 +80,8 @@ export function Toolbar() {
       createItem(name, "file", selectedFolderId);
       setIsNewFileModalOpen(false);
       setInputValue("");
+      toast.success("file created successfully",{autoClose:2000})
+      return
     }
   };
 
@@ -108,12 +113,22 @@ export function Toolbar() {
       }
     }
     if (inputValue.trim() && activeId) {
-      renameItem(activeId, inputValue.trim());
+     renameItem(activeId, inputValue.trim());
       setIsRenameModalOpen(false);
       setInputValue("");
+      toast.success("name update successfully",{autoClose:2000})
+      return
     }
   };
 
+
+  const handleDelete = () => {
+    if (activeId) {
+      if (confirm(`Are you sure you want to delete "${activeItem?.name}"?`)) {
+        deleteItem(activeId);
+      }
+    }
+  };
 
   return (
     <>
@@ -148,6 +163,15 @@ export function Toolbar() {
           title="Rename"
         >
           <Edit2 size={16} />
+        </button>
+
+        <button
+          onClick={handleDelete}
+          disabled={!activeId}
+          className="p-1.5 text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 disabled:opacity-30 rounded-md transition-colors"
+          title="Delete"
+        >
+          <Trash2 size={16} />
         </button>
       </div>
 

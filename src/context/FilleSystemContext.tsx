@@ -15,6 +15,7 @@ export const FileSystemProvider = ({children}:{children:React.ReactNode}) => {
     const [items, setItems] = useState<FileSystemItem[]>(INITIAL_DATA);
     const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
     const [selectedFileId, setSelectedFileId] = useState<string | null>(null);
+    
 
     useEffect(() => {
         try {
@@ -53,6 +54,29 @@ export const FileSystemProvider = ({children}:{children:React.ReactNode}) => {
         );
       }, []);
 
+      const deleteItem = useCallback((id: string) => {
+        setItems((prev) => {
+          const idsToDelete = new Set<string>();
+    
+          const collectIdsToDelete = (itemId: string) => {
+            idsToDelete.add(itemId);
+            prev.forEach((item) => {
+              if (item.parentId === itemId) {
+                collectIdsToDelete(item.id);
+              }
+            });
+          };
+    
+          collectIdsToDelete(id);
+          return prev.filter((item) => !idsToDelete.has(item.id));
+        });
+    
+        // Reset selection if deleted
+        if (selectedFolderId === id) setSelectedFolderId(null);
+        if (selectedFileId === id) setSelectedFileId(null);
+      }, [selectedFolderId, selectedFileId]);
+    
+
     return (
         <fileSystemContext.Provider
             value={{
@@ -62,7 +86,8 @@ export const FileSystemProvider = ({children}:{children:React.ReactNode}) => {
                 setSelectedFolderId,
                 setSelectedFileId,
                 selectedFileId,
-                renameItem
+                renameItem,
+                deleteItem
             }}
         >
             {children}
